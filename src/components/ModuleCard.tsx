@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 interface ModuleCardProps {
     code: string;
@@ -13,7 +13,7 @@ export default function ModuleCard({ code, image }: ModuleCardProps) {
                     src={image}
                     alt={code}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                     sizes="100vw"
                 />
             </div>

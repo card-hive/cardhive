@@ -1,7 +1,7 @@
-"use client";
-import { useState } from "react";
-import styles from "@/styles/Header.module.css";
-import Link from "next/link";
+'use client';
+import { useState } from 'react';
+import styles from '@/styles/Header.module.css';
+import Link from 'next/link';
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -10,7 +10,7 @@ export default function Header() {
         <header className={styles.header}>
             <div className={styles.logo}>CardHive</div>
 
-            <nav className={`${styles.nav} ${menuOpen ? styles.open : ""}`}>
+            <nav className={`${styles.nav} ${menuOpen ? styles.open : ''}`}>
                 <Link href="/" onClick={() => setMenuOpen(false)}>
                     Home
                 </Link>
