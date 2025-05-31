@@ -1,5 +1,4 @@
 import Image from "next/image";
-import styles from "../styles/ModulePage.module.css";
 
 interface ModuleCardProps {
     code: string;

@@ -1,5 +1,4 @@
 import ModuleCard from "./ModuleCard";
-import styles from "../styles/ModulePage.module.css";
 
 const modules = [
     { code: "LAJ1201", image: "/japan.jpg" },

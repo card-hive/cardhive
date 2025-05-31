@@ -1,6 +1,4 @@
-import Header from "@/components/Header";
 import ModuleGrid from "@/components/ModuleGrid";
-import styles from "@/styles/ModulePage.module.css";
 
 export default function Modules() {
     return (
