@@ -12,7 +12,7 @@ const modules = [
 
 export default function ModuleGrid() {
     return (
-        <section className={styles.moduleGrid}>
+        <section className="grid grid-cols-3 gap-6 justify-items-center">
             {modules.map((mod) => (
                 <ModuleCard key={mod.code} {...mod} />
             ))}
