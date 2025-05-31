@@ -1,4 +1,4 @@
-import ModuleGrid from "@/components/ModuleGrid";
+import ModuleGrid from '@/components/ModuleGrid';
 
 export default function Modules() {
     return (

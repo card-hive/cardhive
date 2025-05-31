@@ -1,9 +1,9 @@
-import Header from "../Header";
-import { render, screen } from "@testing-library/react";
+import Header from '../Header';
+import { render, screen } from '@testing-library/react';
 
-describe("Header Component", () => {
+describe('Header Component', () => {
     // check if rendering
-    it("renders the header with logo and navigation links", () => {
+    it('renders the header with logo and navigation links', () => {
         render(<Header />);
 
         // Check if CardHive appears
@@ -21,17 +21,17 @@ describe("Header Component", () => {
     });
 
     // check if links are correct
-    it("has correct links for navigation", () => {
+    it('has correct links for navigation', () => {
         render(<Header />);
 
         // Check if links are correct
         const homeLink = screen.getByText(/Home/i);
-        expect(homeLink.closest("a")).toHaveAttribute("href", "/");
+        expect(homeLink.closest('a')).toHaveAttribute('href', '/');
 
         const modulesLink = screen.getByText(/Modules/i);
-        expect(modulesLink.closest("a")).toHaveAttribute("href", "/modules");
+        expect(modulesLink.closest('a')).toHaveAttribute('href', '/modules');
 
         const aboutLink = screen.getByText(/About/i);
-        expect(aboutLink.closest("a")).toHaveAttribute("href", "/about");
+        expect(aboutLink.closest('a')).toHaveAttribute('href', '/about');
     });
 });
