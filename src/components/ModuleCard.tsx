@@ -17,7 +17,7 @@ export default function ModuleCard({ code, image }: ModuleCardProps) {
                     sizes="100vw"
                 />
             </div>
-            <div className="bg-purple-200 text-black text-center font-semibold py-2 w-full">
+            <div className="bg-violet-300 text-black text-center font-semibold py-2 w-full">
                 {code}
             </div>
         </div>
