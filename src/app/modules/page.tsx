@@ -3,7 +3,7 @@ import ModuleGrid from '@/components/ModuleGrid';
 export default function Modules() {
     return (
         <main className="min-h-screen bg-white flex flex-col items-center">
-            <div className="w-full max-w-4xl p-6">
+            <div className="w-full max-w-4xl p-6 ">
                 <h2 className="text-3xl font-bold mb-4">Modules</h2>
                 <input
                     type="text"
