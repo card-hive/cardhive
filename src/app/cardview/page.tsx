@@ -14,13 +14,23 @@ export default function CardView() {
 
     const cards = rawCards.map((card) => ({
         id: card.id,
-        frontHTML: <div>{card.question}</div>,
-        backHTML: <div>{card.answer}</div>,
+        frontHTML: (
+            <div className={'flex items-center justify-center h-full'}>
+                <p className={'text-xl'}>{card.question}</p>
+            </div>
+        ),
+        backHTML: (
+            <div className={'flex items-center justify-center h-full'}>
+                <p className={'text-xl'}>{card.answer}</p>
+            </div>
+        ),
     }));
 
     return (
-        <div>
-            <FlashcardArray cards={cards} />
-        </div>
+        <main className={'max-w-4xl mx-auto p-6'}>
+            <div className={'flex flex-col items-center justify-start'}>
+                <FlashcardArray cards={cards} />
+            </div>
+        </main>
     );
 }
