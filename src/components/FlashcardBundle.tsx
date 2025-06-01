@@ -4,32 +4,29 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface ModuleCardProps {
-    code: string;
+    title: string;
     image: string;
 }
 
-export default function ModuleCard({ code, image }: ModuleCardProps) {
+export default function ModuleCard({ title, image }: ModuleCardProps) {
     const router = useRouter();
 
-    function reRoute(route: String) {
-        router.push('/modules/' + route);
-    }
     return (
         <div
-            onClick={() => reRoute(code)}
+            onClick={() => router.push('/cardview')}
             className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center"
         >
             <div className="relative w-full h-32">
                 <Image
                     src={image}
-                    alt={code}
+                    alt={title}
                     fill
                     style={{ objectFit: 'cover' }}
                     sizes="100vw"
                 />
             </div>
             <div className="bg-violet-300 text-black text-center font-semibold py-2 w-full">
-                {code}
+                {title}
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ export default function Modules() {
                 <h2 className="text-3xl font-bold mb-4">Modules</h2>
                 <input
                     type="text"
-                    placeholder="Search for Modules..."
+                    placeholder="Search for Modules (not implemented yet)..."
                     className="border rounded-md px-4 py-2 w-full mb-6"
                 />
                 <ModuleGrid />

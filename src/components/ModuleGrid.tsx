@@ -1,5 +1,6 @@
 import ModuleCard from './ModuleCard';
 
+//sample data
 const modules = [
     { code: 'LAJ1201', image: '/japan.jpg' },
     { code: 'CS1101S', image: '/matrix.jpg' },
