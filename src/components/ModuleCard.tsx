@@ -7,7 +7,7 @@ interface ModuleCardProps {
 
 export default function ModuleCard({ code, image }: ModuleCardProps) {
     return (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center">
+        <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col w-full items-center">
             <div className="relative w-full h-32">
                 <Image
                     src={image}
