@@ -1,4 +1,7 @@
+'use client';
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface ModuleCardProps {
     code: string;
@@ -6,8 +9,16 @@ interface ModuleCardProps {
 }
 
 export default function ModuleCard({ code, image }: ModuleCardProps) {
+    const router = useRouter();
+
+    function reRoute(route: String) {
+        router.push('/modules/' + route);
+    }
     return (
-        <div className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center">
+        <div
+            onClick={() => reRoute(code)}
+            className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center"
+        >
             <div className="relative w-full h-32">
                 <Image
                     src={image}
