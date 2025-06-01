@@ -17,7 +17,7 @@ export default function ModuleCard({ code, image }: ModuleCardProps) {
     return (
         <div
             onClick={() => reRoute(code)}
-            className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center"
+            className="bg-white rounded-2xl shadow-md overflow-hidden w-full flex flex-col items-center"
         >
             <div className="relative w-full h-32">
                 <Image
