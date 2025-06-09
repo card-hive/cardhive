@@ -1,4 +1,3 @@
-import ModuleCard from './ModuleCard';
 import FlashcardBundle from './FlashcardBundle';
 
 // Updated sample data with only title and img
