@@ -7,20 +7,17 @@ import CardSet from '@/components/CardSet';
 // }
 
 type Props = {
-    params: {
-        id: string;
-    };
+    params: Promise<{ id: string }>;
 };
 
 export default async function ModulePage({ params }: Props) {
-    // const mod = await getModuleById(params.id);
-
-    //   if (!mod) return notFound();
+    const resolvedParams = await params; // Await the promise
+    const id = resolvedParams.id;
 
     return (
         <main className="min-h-screen bg-white flex flex-col items-center">
             <div className="w-full max-w-4xl p-6">
-                <h2 className="text-3xl font-bold mb-4">{params.id}</h2>
+                <h2 className="text-3xl font-bold mb-4">{id}</h2>
                 <input
                     type="text"
                     placeholder="Search for Modules (not implemented yet)..."
