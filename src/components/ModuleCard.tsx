@@ -11,7 +11,7 @@ interface ModuleCardProps {
 export default function ModuleCard({ code, image }: ModuleCardProps) {
     const router = useRouter();
 
-    function reRoute(route: String) {
+    function reRoute(route: string) {
         router.push('/modules/' + route);
     }
     return (

@@ -1,11 +1,10 @@
 // import { notFound } from 'next/navigation';
-import ModuleGrid from '@/components/ModuleGrid';
 import CardSet from '@/components/CardSet';
 
-// DB function — replace this with your actual DB call
-async function getModuleById(id: string) {
-    console.log(id);
-}
+// DB function — replace this with actual DB call
+// async function getModuleById(id: string) {
+//     console.log(id);
+// }
 
 type Props = {
     params: {
@@ -14,9 +13,9 @@ type Props = {
 };
 
 export default async function ModulePage({ params }: Props) {
-    const module = await getModuleById(params.id);
+    // const mod = await getModuleById(params.id);
 
-    //   if (!module) return notFound();
+    //   if (!mod) return notFound();
 
     return (
         <main className="min-h-screen bg-white flex flex-col items-center">

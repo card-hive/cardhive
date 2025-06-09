@@ -1,6 +1,6 @@
 'use client';
 import { FlashcardArray } from 'react-quizlet-flashcard';
-import { useParams, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import cardSets from '@/data/cardSets';
 
 export default function CardView() {
