@@ -1,44 +1,36 @@
-'use client';
-import { useState } from 'react';
-import styles from '@/styles/Header.module.css';
-import Link from 'next/link';
+"use client";
+import { useState } from "react";
+import styles from "./Header.module.css";
 
 export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
         <header className={styles.header}>
-            <div className={styles.logo}>CardHive</div>
-            <nav className={`${styles.nav} ${menuOpen ? styles.open : ''}`}>
-                <Link
-                    href="/"
-                    onClick={() => setMenuOpen(false)}
-                    className={styles.navLink}
-                >
+            <div className={styles.logo}>MyLogo</div>
+
+            <nav className={`${styles.nav} ${menuOpen ? styles.open : ""}`}>
+                <a href="#home" onClick={() => setMenuOpen(false)}>
                     Home
-                </Link>
-                <Link
-                    href="/modules"
-                    onClick={() => setMenuOpen(false)}
-                    className={styles.navLink}
-                >
-                    Modules
-                </Link>
-                <Link
-                    href="/about"
-                    onClick={() => setMenuOpen(false)}
-                    className={styles.navLink}
-                >
+                </a>
+                <a href="#about" onClick={() => setMenuOpen(false)}>
                     About
-                </Link>
-                {/* <button
-                    className="text-white text-2xl"
-                    onClick={() => setMenuOpen(!menuOpen)}
-                    aria-label="Toggle menu"
-                >
-                    ☰
-                </button> */}
+                </a>
+                <a href="#services" onClick={() => setMenuOpen(false)}>
+                    Services
+                </a>
+                <a href="#contact" onClick={() => setMenuOpen(false)}>
+                    Contact
+                </a>
             </nav>
+
+            <button
+                className={styles.menuButton}
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle menu"
+            >
+                ☰
+            </button>
         </header>
     );
 }
