@@ -1,16 +1,40 @@
-import ModuleCard from './ModuleCard';
+'use client';
 
-//sample data
-const modules = [
-    { code: 'LAJ1201', image: '/japan.jpg' },
-    { code: 'CS1101S', image: '/matrix.jpg' },
-    { code: 'MA1521', image: '/math.jpeg' },
-    { code: 'LAJ2201', image: '/japan.jpg' },
-    { code: 'CS2040S', image: '/matrix.jpg' },
-    { code: 'MA1522', image: '/math.jpeg' },
-];
+import ModuleCard from './ModuleCard';
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabaseClient';
+
+interface Module {
+    code: string;
+    image: string;
+}
 
 export default function ModuleGrid() {
+    const [modules, setModules] = useState<Module[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchModules = async () => {
+            const { data, error } = await supabase
+                .from('modules')
+                .select('code, image');
+
+            if (error) {
+                console.error('Error fetching modules:', error);
+            } else {
+                setModules(data);
+            }
+
+            setLoading(false);
+        };
+
+        fetchModules();
+    }, []);
+
+    if (loading) return <p>Loading modules...</p>;
+
+    console.log(modules);
+
     return (
         <section className="grid grid-cols-3 gap-6 justify-items-center">
             {modules.map((mod) => (
