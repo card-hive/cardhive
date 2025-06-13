@@ -8,7 +8,7 @@ export default async function CardView() {
         .from('cards')
         .select('*')
         .eq('cardset_id', setId);
-    console.log('Fetched cards:', rawCards, 'Error:', error);
+    // console.log('Fetched cards:', rawCards, 'Error:', error);
 
     if (error || !rawCards || rawCards.length === 0) {
         return notFound();
