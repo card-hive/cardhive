@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 export default function Home() {
+    // Temporary redirect to modules page until homepage is implemented
     redirect('/modules');
     // return (
     //     <div>
