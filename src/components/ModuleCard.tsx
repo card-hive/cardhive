@@ -12,7 +12,7 @@ export default function ModuleCard({ code, image }: ModuleCardProps) {
     const router = useRouter();
 
     function reRoute(route: string) {
-        router.push('/modules/' + route);
+        router.push('/modules/cardsets/' + route);
     }
     return (
         <div

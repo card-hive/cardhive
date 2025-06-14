@@ -2,12 +2,18 @@ import { supabase } from '@/lib/supabaseClient';
 import { notFound } from 'next/navigation';
 import FlashcardRenderer from '@/components/FlashcardRenderer'; // adjust path as needed
 
-export default async function CardView() {
-    const setId = '83b83201-e062-4edd-87fb-5d3fba686fa8';
+type Params = { cardset_id: string };
+
+export default async function CardView({
+    params,
+}: {
+    params: Promise<Params>;
+}) {
+    const { cardset_id: cardsetId } = await params;
     const { data: rawCards, error } = await supabase
         .from('cards')
         .select('*')
-        .eq('cardset_id', setId);
+        .eq('cardset_id', cardsetId);
     // console.log('Fetched cards:', rawCards, 'Error:', error);
 
     if (error || !rawCards || rawCards.length === 0) {
