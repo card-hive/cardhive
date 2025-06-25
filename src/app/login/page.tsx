@@ -1,52 +1,48 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { login } from './actions';
 
-export default function Home() {
-    const router = useRouter();
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+export default function LoginPage() {
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // Example POST request (replace with actual API call)
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-        });
-
-        if (res.ok) {
-            router.push('/modules');
-        } else {
-            console.log(res);
-            alert('Wrong email or password');
+    async function handleFormAction(formData: FormData) {
+        setLoading(true);
+        setError(null);
+        try {
+            await login(formData);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message || 'Something went wrong.');
+            } else {
+                setError('Something went wrong.');
+            }
+            setLoading(false);
         }
-    };
+    }
 
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <br></br>
+            <br />
             <div>
                 <form
-                    onSubmit={handleLogin}
+                    action={handleFormAction}
                     className="bg-[#b2acff] p-6 rounded-lg shadow-md"
                 >
-                    <p>Username/Email: </p>
+                    <p>Email: </p>
                     <input
+                        name="email"
                         type="text"
                         className="rounded-lg shadow-md"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        required
                     />
                     <p>Password: </p>
                     <input
+                        name="password"
                         type="password"
                         className="rounded-lg shadow-md"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                     <br />
                     <button
@@ -56,7 +52,16 @@ export default function Home() {
                         Login
                     </button>
                 </form>
+
                 <div className="mt-4 text-center">
+                    {error && (
+                        <p className="text-red-600 text-center mt-2">{error}</p>
+                    )}
+                    {loading && (
+                        <p className="text-red-600 text-center mt-2">
+                            Loading....
+                        </p>
+                    )}
                     <a href="/forgot" className="block underline">
                         Forgot password/email
                     </a>
