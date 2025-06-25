@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
-export default function signup() {
+export default function Signup() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -40,6 +40,9 @@ export default function signup() {
         if (signupError) {
             console.error('Signup error:', signupError.message);
             setError(signupError.message);
+        } else if (insertError) {
+            console.error(insertError.message);
+            setError(insertError.message);
         } else {
             setSuccess(true);
             setError(null);

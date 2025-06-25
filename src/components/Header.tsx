@@ -31,7 +31,7 @@ export default function Header() {
                 >
                     About
                 </Link>
-                {/* <button
+                {/* <buttonAdd commentMore actions
                     className="text-white text-2xl"
                     onClick={() => setMenuOpen(!menuOpen)}
                     aria-label="Toggle menu"
@@ -39,6 +39,14 @@ export default function Header() {
                     ☰
                 </button> */}
             </nav>
+
+            {/* <button
+                className={styles.menuButton}
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle menu"
+            >
+                ☰
+            </button> */}
         </header>
     );
 }

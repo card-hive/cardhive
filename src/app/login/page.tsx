@@ -12,8 +12,12 @@ export default function LoginPage() {
         setError(null);
         try {
             await login(formData);
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong.');
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message || 'Something went wrong.');
+            } else {
+                setError('Something went wrong.');
+            }
             setLoading(false);
         }
     }
