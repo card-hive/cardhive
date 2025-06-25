@@ -14,14 +14,32 @@ export default function signup() {
     const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
+        //TODO: atmoise the signup
 
-        if (error) {
-            console.error('Signup error:', error.message);
-            setError(error.message);
+        const { data: signupData, error: signupError } =
+            await supabase.auth.signUp({
+                email,
+                password,
+            });
+
+        if (signupError) {
+            console.error('Signup error:', signupError.message);
+            setError(signupError.message);
+        }
+        if (!signupData || !signupData.user) {
+            return;
+        }
+
+        const { error: insertError } = await supabase.from('accounts').insert([
+            {
+                account_id: signupData.user.id,
+                email,
+            },
+        ]);
+
+        if (signupError) {
+            console.error('Signup error:', signupError.message);
+            setError(signupError.message);
         } else {
             setSuccess(true);
             setError(null);

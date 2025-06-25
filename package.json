@@ -12,7 +12,9 @@
         "prepare": "husky"
     },
     "dependencies": {
-        "@supabase/supabase-js": "^2.50.0",
+        "@supabase/auth-helpers-nextjs": "^0.10.0",
+        "@supabase/ssr": "^0.6.1",
+        "@supabase/supabase-js": "^2.50.1",
         "next": "15.3.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
