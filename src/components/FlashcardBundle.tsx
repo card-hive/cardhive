@@ -1,20 +1,21 @@
-'use client';
-
+import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
-interface ModuleCardProps {
+interface FlashcardBundleProps {
     title: string;
     image: string;
+    cardset_id: string;
 }
 
-export default function ModuleCard({ title, image }: ModuleCardProps) {
-    const router = useRouter();
-
+export default function FlashcardBundle({
+    title,
+    image,
+    cardset_id,
+}: FlashcardBundleProps) {
     return (
-        <div
-            onClick={() => router.push('/cardview')}
-            className="bg-white rounded-2xl shadow-md overflow-hidden w-48 h-48 flex flex-col items-center"
+        <Link
+            href={`/cardview/${cardset_id}`}
+            className="bg-white rounded-2xl shadow-md overflow-hidden w-full flex flex-col items-center"
         >
             <div className="relative w-full h-32">
                 <Image
@@ -28,6 +29,6 @@ export default function ModuleCard({ title, image }: ModuleCardProps) {
             <div className="bg-violet-300 text-black text-center font-semibold py-2 w-full">
                 {title}
             </div>
-        </div>
+        </Link>
     );
 }

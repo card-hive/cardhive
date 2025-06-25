@@ -4,8 +4,12 @@ on:
     pull_request:
         branches: [main]
 
+env:
+    NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
 jobs:
-    lint-and-test:
+    lint-test-build:
         runs-on: ubuntu-latest
 
         steps:
