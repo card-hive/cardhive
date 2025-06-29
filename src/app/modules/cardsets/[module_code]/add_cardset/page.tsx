@@ -65,6 +65,12 @@ export default function CreateCardSetPage({
         ),
     }));
 
+    const handleDelete = (index: number) => {
+        const updated = [...flashcards];
+        updated.splice(index, 1);
+        setFlashcards(updated);
+    };
+
     return (
         <div className="p-6 max-w-3xl mx-auto">
             <h1 className="text-2xl font-bold mb-4">
@@ -156,6 +162,12 @@ export default function CreateCardSetPage({
                                         ↓
                                     </button>
                                 )}
+                                <button
+                                    onClick={() => handleDelete(index)}
+                                    className="text-red-600"
+                                >
+                                    ✕
+                                </button>
                             </div>
                         </li>
                     ))}
