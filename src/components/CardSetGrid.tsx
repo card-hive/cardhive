@@ -1,15 +1,5 @@
 import FlashcardBundle from './FlashcardBundle';
 
-// Updated sample data with only title and img
-// const cardSets = [
-//     { title: 'Generic Notes 1', image: '/teacherpink.jpg' },
-//     { title: 'Generic Notes 2', image: '/studentpink.jpg' },
-//     { title: 'Generic Notes 3', image: '/tapink.jpg' },
-//     { title: 'Midterm Study Set', image: '/studentpink.jpg' },
-//     { title: 'Lecture Notes A', image: '/teacherpink.jpg' },
-//     { title: 'Assignment Review', image: '/tapink.jpg' },
-// ];
-
 type CardSet = {
     id: string;
     title: string;
