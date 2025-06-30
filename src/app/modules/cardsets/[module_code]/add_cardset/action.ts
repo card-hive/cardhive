@@ -2,6 +2,7 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 export async function submitCardSet(
     moduleCode: string,
@@ -9,6 +10,20 @@ export async function submitCardSet(
     flashcards: { front: string; back: string }[],
 ) {
     const supabase = await createClient();
+    const tokens = await cookies();
+    const base64Tokens = tokens.get('sb-vuttvgeuoefxkokqwbxz-auth-token');
+    let authTokens = '';
+    const decode = (str: string): string =>
+        Buffer.from(str, 'base64').toString('binary');
+    if (base64Tokens) {
+        authTokens = base64Tokens.value;
+        authTokens = authTokens.slice(7);
+    }
+    if (authTokens != '') {
+        authTokens = decode(authTokens);
+    }
+    const obj = JSON.parse(authTokens);
+    const ownerID = obj.user.id;
 
     // 1. Get module_id by module code
     const { data: module, error: moduleError } = await supabase
@@ -46,8 +61,8 @@ export async function submitCardSet(
             title,
             modules: [module.module_id],
             cards: cardIds,
-            owner: null, // set to user id if applicable
-            description: '',
+            owner: ownerID,
+            description: moduleCode,
             public: false,
         })
         .select()
