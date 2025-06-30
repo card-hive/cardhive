@@ -36,12 +36,29 @@ export default async function CardsetsPage({
     return (
         <main className="min-h-screen bg-white flex flex-col items-center">
             <div className="w-full max-w-4xl p-6">
-                <h2 className="text-3xl font-bold mb-4">{moduleCode}</h2>
-                <input
+                <div className="w-full max-w-4xl p-6">
+                    <h2 className="text-3xl font-bold mb-4">{moduleCode}</h2>
+
+                    <input
+                        type="text"
+                        placeholder="Search for cardset (not implemented yet)..."
+                        className="border rounded-md px-4 py-2 w-full mb-6"
+                    />
+
+                    <div className="flex justify-end mb-6">
+                        <a
+                            href={`/modules/cardsets/${moduleCode}/add_cardset`}
+                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+                        >
+                            + Add Card Set
+                        </a>
+                    </div>
+                </div>
+                {/* <input
                     type="text"
-                    placeholder="Search for Modules (not implemented yet)..."
+                    placeholder="Search for cardset (not implemented yet)..."
                     className="border rounded-md px-4 py-2 w-full mb-6"
-                />
+                /> */}
                 <CardSetGrid cardsets={cardsets || []} />
                 <footer className="text-right text-sm text-gray-600 mt-8">
                     Alroy and Damien

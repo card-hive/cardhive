@@ -12,13 +12,17 @@
         "prepare": "husky"
     },
     "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/modifiers": "^9.0.0",
+        "@dnd-kit/sortable": "^10.0.0",
         "@supabase/auth-helpers-nextjs": "^0.10.0",
         "@supabase/ssr": "^0.6.1",
         "@supabase/supabase-js": "^2.50.1",
         "next": "15.3.3",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-        "react-quizlet-flashcard": "^3.0.0"
+        "react-quizlet-flashcard": "^3.0.0",
+        "uuid": "^11.1.0"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
@@ -44,5 +48,4 @@
         "ts-node": "^10.9.2",
         "typescript": "^5"
     }
-
 }
