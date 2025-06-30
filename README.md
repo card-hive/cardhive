@@ -1,7 +1,5 @@
 # README
 
-[README](https://www.notion.so/README-202f47d19e6f80bdbe83f5c09c3efe7d?pvs=21)
-
 # **Motivation**
 
 As students, we realised that building a strong foundation early in our learning process is crucial for long-term success. However, we struggled to find targeted, high-quality resources that were both collaborative and efficient in helping us understand concepts deeply. Existing platforms like Quizlet and Anki provide great individual learning experiences, but they lack an organized, structured approach for university students to share, verify, and consolidate knowledge in a meaningful way.
@@ -28,15 +26,55 @@ The goal is simple: to make structured learning more efficient, reliable, and en
 
 # **Features**
 
-1. Feature 1 (core): Allow users to make flashcards sets within modules
-2. Feature 2 (core): Allow sharing of flashcard sets (Card Sets)
-3. Feature 3 (core): Allow creation of Student, TA and Professor accounts.
-4. Feature 4 (core): Allow verification of flashcards by professors/TAs
-5. Feature 5 (core) : Allow for review of flashcards
-6. Feature 6 (core) : Allow users to start tests based on flashcards with auto-marking for quick and easy revision
-7. Feature 7 (extension): Mix and match flashcards across different Card Sets
-8. Feature 8 (extension): Allow for paid features such as customisable appearances on flashcards
-9. Feature 9 (extension) : Allow for private Card Sets for internal sharing between friend groups.
+### 🔑 Core Features
+
+1. **Create Flashcard Sets by Module**
+
+    Users can create flashcard sets within predefined **NUS module codes**. This ensures flashcards are organized and relevant to specific academic content.
+
+2. **Share Card Sets via Hives**
+
+    Users can share flashcard sets within **Hives** – private friend groups where members can **view, save, and collaborate** on card sets.
+
+3. **User Authentication (Students, TAs, Professors)**
+
+    The system supports account creation and login for **students, teaching assistants, and professors**, each with role-based permissions.
+
+4. **Flashcard Verification by TAs/Professors**
+
+    Verified users (TAs or professors) can **review and approve flashcards**, adding an extra layer of academic credibility to shared content.
+
+5. **Flashcard Set Reviews & Ratings**
+
+    Users can leave **written reviews (100–200 words)** and rate flashcard sets. An **average star rating** will be shown at the card set selection page.
+
+    _(Note: Reviews will appear on a future Card Set Intro Page.)_
+
+---
+
+### ⏭️ Extension Features (Planned)
+
+1. **Test Mode with Auto-Marking (MCQ Only)**
+
+    Users can toggle flashcards as **MCQ**. In **test mode**, the app auto-generates quizzes using only MCQ flashcards and auto-marks responses.
+
+2. **Mix-and-Match Across Card Sets**
+
+    Users can **combine flashcards** from multiple card sets to create custom study decks across topics or modules.
+
+3. **Paid Customization Options**
+
+    Premium users can unlock **customizable flashcard appearances** (e.g., themes, fonts, card animations).
+
+4. **Private Card Sets for Friend Groups**
+
+    Users will be able to create **private card sets**, shared only within their Hive for internal collaboration and privacy.
+
+---
+
+### 🔮 Future Enhancement: Verified Modules
+
+While modules will be **predefined in the app** initially, we plan to allow **verified users** (TAs or professors) to **create and validate new modules**, making the system scalable and inclusive of special or elective courses.
 
 # **Timeline**
 
@@ -61,20 +99,213 @@ The goal is simple: to make structured learning more efficient, reliable, and en
 
 # **Tech Stack**
 
-| Component | Technology                                   |
-| --------- | -------------------------------------------- |
-| Frontend  | Next.js (React)                              |
-| Backend   | Node.js (Express/NestJS) + Firebase          |
-| Database  | Firestore (NoSQL)                            |
-| Auth      | Firebase Auth                                |
-| Storage   | Firebase Storage                             |
-| Payments  | Stripe                                       |
-| Hosting   | Vercel (frontend) + Railway/Render (backend) |
+| Component    | Technology                                       |
+| ------------ | ------------------------------------------------ |
+| Frontend     | Next.js (React)                                  |
+| Backend      | Node.js (Express/NestJS) + Firebase              |
+| Database     | Supabase                                         |
+| Auth         | Supabase Auth                                    |
+| ~~Storage~~  | ~~Firebase Storage~~                             |
+| ~~Payments~~ | ~~Stripe~~                                       |
+| Hosting      | Vercel (frontend) + ~~Railway/Render (backend)~~ |
+
+## 🌐 Architecture Overview
+
+_A visual breakdown of how the different components interact._
+
+TODO: _Add architecture diagram_
+
+`/docs/architecture.png` or `/public/system-diagram.png`
+
+---
+
+# TODO: Database
+
+# SWE Practices
+
+## 🧪 Frontend Engineering Workflow Overview
+
+This document outlines the key practices and tooling used in this project to ensure maintainable, consistent, and high-quality code delivery.
+
+---
+
+## ✅ Component Testing
+
+We use **unit tests** to verify the functionality of React components using libraries such as:
+
+- [`@testing-library/react`](https://testing-library.com/docs/react-testing-library/intro/)
+- [`vitest`](https://vitest.dev/) or [`jest`](https://jestjs.io/)
+
+This ensures each component behaves correctly in isolation and regressions are caught early.
+
+```
+// Example test
+import { render, screen } from '@testing-library/react';
+import MyComponent from './MyComponent';
+
+test('renders the title correctly', () => {
+  render(<MyComponent />);
+  expect(screen.getByText('Welcome!')).toBeInTheDocument();
+});
+
+```
+
+## 🗂️ Git & GitHub for Version Control
+
+All version control is managed via **Git**, with **GitHub** used for remote repository hosting and collaboration.
+
+### Git Practices:
+
+- Descriptive commit messages (e.g., `feat: add flashcard grid layout`)
+- Rebased or squashed commits before merging
+- Regular pushes to ensure backup and collaboration
+
+_GIF: GitHub branch graph_
+
+![commitgraph.gif](assets/commitgraph.gif)
+
+---
+
+## 🧹 Pre-commit Hooks: Lint, Format & Test
+
+We use [`lint-staged`](https://github.com/okonet/lint-staged) and `husky` to enforce code quality **before commits** are allowed.
+
+### Pre-commit tasks include:
+
+- ✅ Linting (`eslint`)
+- ✅ Formatting (`prettier`)
+- ✅ Type checking
+- ✅ Running component tests
+
+```bash
+npx husky add .husky/pre-commit "npx lint"
+```
+
+_GIF: terminal showing lint-staged running on commit_
+
+![lint-test.gif](assets/lint-test.gif)
+
+---
+
+## 🌿 Feature-based Branching Strategy
+
+Each new feature, bugfix, or enhancement is developed in a **dedicated Git branch** following a naming convention:
+
+- `feat/cardset-grid`
+- `fix/modal-close-issue`
+- `chore/update-readme`
+
+### Benefits:
+
+- Parallel development
+- Easier code review
+- Isolated testing before merge
+
+---
+
+## 🔐 Main Branch Protection & PR Checks
+
+The `main` branch is **protected** to prevent direct pushes.
+
+### ✅ Required for every Commit:
+
+- Lint must pass
+- Tests must pass
+
+These checks are enforced locally using **Husky** (pre-commit and pre-push hooks). To ensure these rules apply consistently across all contributors, they're also reinforced via **GitHub Actions CI** (Below).
+
+### ✅ Required for every Pull Request:
+
+- Lint must pass
+- Tests must pass
+- Build must succeed (`npm run build`)
+
+All of these are enforced via GitHub Actions CI checks.
+
+_image: GitHub PR with passing checks & required status checks_
+
+![lint-test-build.png](assets/lint-test-build.png)
+
+---
+
+## ⚙️ CI/CD with Vercel
+
+We use **Vercel** for seamless CI/CD.
+
+- Every push to a branch spins up a **preview deployment**
+- Every merge to `main` triggers a **production deployment**
+- Environment variables are managed via Vercel Dashboard
+
+**Note**: Due to free tier limitations:
+
+- We fork and push to personal repos for deploy previews
+- PRs are created back to the main repo under the GitHub Organization
+
+_image: Vercel dashboard_
+
+![vercel-dashboard.png](assets/vercel-dashboard.png)
+
+---
+
+## 🏢 GitHub Organization Structure
+
+Project code is managed under a **GitHub Organization** for:
+
+- Centralized access control
+- Audit-friendly code ownership
+- Shared CI/CD & environment management
+
+Team members contribute via fork + PR model where necessary.
+
+_image: GitHub organization team_
+
+![GH-org.png](assets/GH-org.png)
+
+---
+
+## 🔄 Summary of Workflow
+
+```mermaid
+
+graph TD
+FB[Feature Branch] -->|Code & Commit| PCLT[Pre-commit lint & tests]
+PCLT -->|pass| PTG[Push to GitHub]
+PCLT -->|fail| RC[Reject Commit]
+RC --> FB
+PTG --> PR[Pull Request to Main]
+PR --> LTB[GitHub Actions: Lint, Test, Build]
+LTB --> |pass| CRAA[Code Review & Approval]
+LTB -->|fail| RPR[Reject Pull Request]
+RPR -->|Fix the Build & Commit| PCLT
+CRAA --> SMTM[Squash & Merge to Main]
+SMTM --> PDV[Production Re-deployment via Vercel]
+```
+
+---
+
+## 📁 Directory Suggestions for Supporting Files
+
+```bash
+/.husky/             # Husky hooks
+/.github/workflows/  # GitHub Actions, integration tests
+```
+
+# Application Flow Diagram
+
+![loginflow.png](assets/loginflow.png)
+
+![appflow.png](assets/appflow.png)
+
+# ERD Diagram for Database
+
+![ERD.png](assets/ERD.png)
 
 # Prototype
 
-![image.png](assets/image.png)
+![figma-proto.png](assets/figma-proto.png)
 
 # Deployment
+
+Create Account → Login → Modules → CS2040S → CS2040S First Set
 
 [https://cardhive-rose.vercel.app/](https://cardhive-rose.vercel.app/)
