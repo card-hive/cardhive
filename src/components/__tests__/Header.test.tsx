@@ -13,7 +13,7 @@ describe('Header Component', () => {
         // Check if nav links appear
         const homeLink = screen.getByText(/Home/i);
         const modulesLink = screen.getByText(/Modules/i);
-        const aboutLink = screen.getByText(/About/i);
+        const aboutLink = screen.getByText(/My Account/i);
 
         expect(homeLink).toBeInTheDocument();
         expect(modulesLink).toBeInTheDocument();
@@ -31,7 +31,7 @@ describe('Header Component', () => {
         const modulesLink = screen.getByText(/Modules/i);
         expect(modulesLink.closest('a')).toHaveAttribute('href', '/modules');
 
-        const aboutLink = screen.getByText(/About/i);
-        expect(aboutLink.closest('a')).toHaveAttribute('href', '/about');
+        const aboutLink = screen.getByText(/My Account/i);
+        expect(aboutLink.closest('a')).toHaveAttribute('href', '/my_account');
     });
 });

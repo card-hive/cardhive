@@ -25,11 +25,11 @@ export default function Header() {
                     Modules
                 </Link>
                 <Link
-                    href="/my_account"
+                    href="/about"
                     onClick={() => setMenuOpen(false)}
                     className={styles.navLink}
                 >
-                    My Account
+                    About
                 </Link>
                 {/* <buttonAdd commentMore actions
                     className="text-white text-2xl"
