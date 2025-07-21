@@ -104,6 +104,7 @@ export default async function RequestDetailsPage({
                         </p>
                         <div className="flex flex-col gap-4">
                             {signedImages.map((url, idx) => (
+                                // eslint-disable-next-line @next/next/no-img-element
                                 <img
                                     key={idx}
                                     src={url}
