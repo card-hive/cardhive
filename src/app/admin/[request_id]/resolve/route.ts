@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { NextResponse } from 'next/server';
+import { redirect } from 'next/navigation';
 
 export async function POST(
     request: Request,
@@ -10,7 +10,7 @@ export async function POST(
     const {
         data: { user },
     } = await supabase.auth.getUser();
-    if (!user) return NextResponse.redirect('/login');
+    if (!user) return redirect('/login');
 
     const requestId = await params;
 
@@ -20,5 +20,5 @@ export async function POST(
         .update({ status: 'Resolved' })
         .eq('request_id', requestId);
 
-    return NextResponse.redirect('/admin');
+    return redirect('/admin');
 }
