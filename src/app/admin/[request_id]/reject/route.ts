@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
     request: Request,
-    context: { params: { request_id: string } },
+    { params }: { params: { request_id: string } },
 ): Promise<Response> {
     const supabase = await createClient();
 
@@ -16,7 +16,7 @@ export async function POST(
     await supabase
         .from('requests')
         .update({ status: 'Rejected' })
-        .eq('request_id', context.params.request_id);
+        .eq('request_id', params.request_id);
 
     return NextResponse.redirect('/admin');
 }

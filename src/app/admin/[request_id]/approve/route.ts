@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
     request: Request,
-    context: { params: { request_id: string } },
+    { params }: { params: { request_id: string } },
 ): Promise<Response> {
     const supabase = await createClient();
 
@@ -16,7 +16,7 @@ export async function POST(
     const { data: reqData } = await supabase
         .from('requests')
         .select('account_id, account_type')
-        .eq('request_id', context.params.request_id)
+        .eq('request_id', params.request_id)
         .single();
 
     if (!reqData)
@@ -35,7 +35,7 @@ export async function POST(
     await supabase
         .from('requests')
         .update({ status: 'Approved' })
-        .eq('request_id', context.params.request_id);
+        .eq('request_id', params.request_id);
 
     return NextResponse.redirect('/admin');
 }
