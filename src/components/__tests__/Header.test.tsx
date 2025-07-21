@@ -13,11 +13,11 @@ describe('Header Component', () => {
         // Check if nav links appear
         const homeLink = screen.getByText(/Home/i);
         const modulesLink = screen.getByText(/Modules/i);
-        const aboutLink = screen.getByText(/About/i);
+        const allCardSetsLink = screen.getByText(/All Cardsets/i);
 
         expect(homeLink).toBeInTheDocument();
         expect(modulesLink).toBeInTheDocument();
-        expect(aboutLink).toBeInTheDocument();
+        expect(allCardSetsLink).toBeInTheDocument();
     });
 
     // check if links are correct
@@ -31,7 +31,10 @@ describe('Header Component', () => {
         const modulesLink = screen.getByText(/Modules/i);
         expect(modulesLink.closest('a')).toHaveAttribute('href', '/modules');
 
-        const aboutLink = screen.getByText(/About/i);
-        expect(aboutLink.closest('a')).toHaveAttribute('href', '/about');
+        const allCardsetsLink = screen.getByText(/All Cardsets/i);
+        expect(allCardsetsLink.closest('a')).toHaveAttribute(
+            'href',
+            '/all_cardsets',
+        );
     });
 });
