@@ -43,7 +43,7 @@ export default async function AccountPage() {
                 <div>
                     <p className="text-gray-600 text-sm">Account Type</p>
                     <p className="text-lg font-medium capitalize">
-                        {account.type || '-'}
+                        {account.account_type || '-'}
                     </p>
                 </div>
                 <div>

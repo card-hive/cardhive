@@ -33,7 +33,7 @@ export default async function EditAccountPage() {
     return (
         <EditForm
             initialName={account.name}
-            type={account.type}
+            type={account.account_type}
             email={account.email}
             accountId={user.id}
         />
