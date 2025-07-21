@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 export async function POST(
     request: Request,
     { params }: { params: { request_id: string } },
-) {
+): Promise<Response> {
     const supabase = await createClient();
 
     const {
