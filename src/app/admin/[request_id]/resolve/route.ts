@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(
     request: Request,
-    { params }: { params: { request_id: string } },
+    { params }: { params: Promise<{ request_id: string }> },
 ): Promise<Response> {
     const supabase = await createClient();
 
@@ -12,11 +12,13 @@ export async function POST(
     } = await supabase.auth.getUser();
     if (!user) return NextResponse.redirect('/login');
 
+    const requestId = await params;
+
     // Set request status to Resolved
     await supabase
         .from('requests')
         .update({ status: 'Resolved' })
-        .eq('request_id', params.request_id);
+        .eq('request_id', requestId);
 
     return NextResponse.redirect('/admin');
 }

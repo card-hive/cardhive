@@ -5,7 +5,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 export default async function RequestDetailsPage({
     params,
 }: {
-    params: { request_id: string };
+    params: Promise<{ request_id: string }>;
 }) {
     const supabase = await createClient();
 
@@ -42,12 +42,15 @@ export default async function RequestDetailsPage({
         );
     }
 
+    const paramsResolved = await params;
+    const requestId = paramsResolved.request_id;
+
     const { data: request, error: requestError } = (await supabase
         .from('requests')
         .select(
             'request_id, request_type, status, description, image_links, accounts(name), account_id',
         )
-        .eq('request_id', params.request_id)
+        .eq('request_id', requestId)
         .single()) as unknown as {
         data: RequestRow;
         error: PostgrestError | null;
