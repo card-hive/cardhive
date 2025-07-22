@@ -107,7 +107,7 @@ export default function FlashcardTest({
                 {card.options.map((option, idx) => (
                     <button
                         key={idx}
-                        className="p-3 border rounded hover:bg-gray-100"
+                        className="p-3 border rounded hover:bg-gray-100 cursor-pointer transition"
                         onClick={() => handleOptionClick(option)}
                     >
                         {option}
@@ -116,7 +116,11 @@ export default function FlashcardTest({
             </div>
             {currentIndex === cards.length - 1 && (
                 <button
-                    className="mt-6 px-4 py-2 bg-blue-600 text-white rounded"
+                    className={`mt-6 px-4 py-2 rounded text-white transition ${
+                        answers[card.id]
+                            ? 'bg-blue-600 hnpover:bg-blue-700 cursor-pointer'
+                            : 'bg-gray-400 cursor-not-allowed'
+                    }`}
                     onClick={handleSubmit}
                     disabled={!answers[card.id]}
                 >
