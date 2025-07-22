@@ -53,7 +53,12 @@ export default async function CardView({
     return (
         <main className="max-w-4xl mx-auto p-6">
             <FlashcardRenderer cards={cards} />
-            <Link href={`/cardview/${cardsetId}/testview`}>Start Test</Link>
+            <Link
+                className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                href={`/cardview/${cardsetId}/testview`}
+            >
+                Start Test
+            </Link>
         </main>
     );
 }

@@ -40,7 +40,7 @@ export default async function TestView({
 
     return (
         <main className="max-w-4xl mx-auto p-6">
-            <FlashcardTest cards={testCards} />
+            <FlashcardTest cards={testCards} cardsetId={cardsetId} />
         </main>
     );
 }

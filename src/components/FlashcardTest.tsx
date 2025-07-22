@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 type TestCard = {
     id: string;
@@ -9,7 +10,13 @@ type TestCard = {
     correctAnswer: string;
 };
 
-export default function FlashcardTest({ cards }: { cards: TestCard[] }) {
+export default function FlashcardTest({
+    cards,
+    cardsetId,
+}: {
+    cards: TestCard[];
+    cardsetId: string;
+}) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [submitted, setSubmitted] = useState(false);
@@ -78,6 +85,12 @@ export default function FlashcardTest({ cards }: { cards: TestCard[] }) {
                         );
                     })}
                 </ul>
+                <Link
+                    className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                    href={`/cardview/${cardsetId}`}
+                >
+                    Back
+                </Link>
             </div>
         );
     }
