@@ -1,17 +1,16 @@
 import { supabase } from '@/lib/supabaseClient';
 import { notFound } from 'next/navigation';
-import FlashcardRenderer from '@/components/FlashcardRenderer';
+import FlashcardTest from '@/components/FlashcardTest';
 
 type Params = { cardset_id: string };
 
-export default async function CardView({
+export default async function TestView({
     params,
 }: {
     params: Promise<Params>;
 }) {
     const { cardset_id: cardsetId } = await params;
 
-    // 1. Fetch card ids from the cardset
     const { data: cardset, error: setError } = await supabase
         .from('flashcard_sets')
         .select('cards')
@@ -23,35 +22,25 @@ export default async function CardView({
         return notFound();
     }
 
-    // 2. Fetch the actual cards
     const { data: rawCards, error: cardsError } = await supabase
         .from('cards')
         .select('*')
         .in('card_id', cardset.cards);
 
-    // console.log('Fetched cards:', rawCards, 'Error:', cardsError);
-
     if (cardsError || !rawCards || rawCards.length === 0) {
         return notFound();
     }
 
-    const cards = rawCards.map((card) => ({
+    const testCards = rawCards.map((card) => ({
         id: card.card_id,
-        frontHTML: (
-            <div className="flex items-center justify-center h-full p-6">
-                <p className="text-xl">{card.front}</p>
-            </div>
-        ),
-        backHTML: (
-            <div className="flex items-center justify-center h-full p-6">
-                <p className="text-xl">{card.back}</p>
-            </div>
-        ),
+        question: card.question,
+        options: card.options || [], // assume options is an array column
+        correctAnswer: card.correct_answer,
     }));
 
     return (
         <main className="max-w-4xl mx-auto p-6">
-            <FlashcardRenderer cards={cards} />
+            <FlashcardTest cards={testCards} cardsetId={cardsetId} />
         </main>
     );
 }
