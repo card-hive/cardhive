@@ -47,6 +47,8 @@ export default async function CardView({
                 <p className="text-xl">{card.back}</p>
             </div>
         ),
+        front: card.front,
+        back: card.back,
     }));
 
     return (
