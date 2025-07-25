@@ -63,6 +63,8 @@ export default function CreateCardSetPage({
                 <p className="text-xl">{card.back}</p>
             </div>
         ),
+        front: card.front as unknown as Text,
+        back: card.back as unknown as Text,
     }));
 
     const handleDelete = (index: number) => {
