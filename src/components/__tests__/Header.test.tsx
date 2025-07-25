@@ -36,5 +36,10 @@ describe('Header Component', () => {
             'href',
             '/all_cardsets',
         );
+        const myAccountLink = screen.getByText(/My Account/i);
+        expect(myAccountLink.closest('a')).toHaveAttribute(
+            'href',
+            '/my_account',
+        );
     });
 });
