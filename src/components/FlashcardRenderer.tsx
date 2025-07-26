@@ -10,8 +10,8 @@ interface Flashcard {
     id: number;
     frontHTML: React.ReactNode;
     backHTML: React.ReactNode;
-    front: Text;
-    back: Text;
+    front: string;
+    back: string;
 }
 
 interface SetItem {
@@ -19,12 +19,23 @@ interface SetItem {
     title: string;
 }
 
-export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
+interface FlashcardRendererProps {
+    cards: Flashcard[];
+    cardsetId: string;
+    ownerId: string;
+}
+
+export default function FlashcardRenderer({
+    cards,
+    cardsetId,
+    ownerId,
+}: FlashcardRendererProps) {
     const supabase = createClient();
     const [showMenu, setShowMenu] = useState(false);
     const [availableSets, setAvailableSets] = useState<SetItem[]>([]);
     const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
     const [selectedSetIds, setSelectedSetIds] = useState<string[]>([]);
+    const [currentUser, setCurrentUser] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchSets() {
@@ -34,6 +45,7 @@ export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
             } = await supabase.auth.getUser();
 
             if (userError || !user) redirect('/login');
+            setCurrentUser(user.id);
 
             const { data, error } = await supabase
                 .from('flashcard_sets')
@@ -59,21 +71,14 @@ export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
     const handleAdd = async () => {
         for (const cardId of selectedCardIds) {
             for (const setId of selectedSetIds) {
-                const { data, error } = await supabase.rpc(
-                    'append_card_to_set',
-                    {
-                        set_id_input: setId,
-                        card_id_input: cardId,
-                    },
-                );
-
-                console.log(data);
+                const { error } = await supabase.rpc('append_card_to_set', {
+                    set_id_input: setId,
+                    card_id_input: cardId,
+                });
 
                 if (error) console.error('Failed to append card:', error);
             }
         }
-
-        console.log(selectedCardIds, selectedSetIds);
 
         alert('Cards added to selected sets!');
         setShowMenu(false);
@@ -85,12 +90,23 @@ export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
         <div className="flex flex-col items-center justify-start space-y-6">
             <FlashcardArray cards={cards} />
 
-            <button
-                className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-                onClick={() => setShowMenu(true)}
-            >
-                Add Cards to Sets
-            </button>
+            {ownerId != '' && (
+                <button
+                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+                    onClick={() => setShowMenu(true)}
+                >
+                    Add Cards to Sets
+                </button>
+            )}
+
+            {currentUser === ownerId && (
+                <Link
+                    href={`/cardview/${cardsetId}/edit`}
+                    className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+                >
+                    Edit Cardset
+                </Link>
+            )}
 
             {showMenu && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
@@ -108,10 +124,7 @@ export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
                                         className="mr-2"
                                     />
                                     <span className="font-medium">
-                                        {'Front: ' +
-                                            card.front +
-                                            ', Back: ' +
-                                            card.back}
+                                        Front: {card.front}, Back: {card.back}
                                     </span>
                                 </label>
                             ))}
@@ -121,9 +134,9 @@ export default function FlashcardRenderer({ cards }: { cards: Flashcard[] }) {
                             Select Sets
                         </h2>
                         <div className="max-h-48 overflow-y-auto space-y-2">
-                            {availableSets.length == 0 && (
+                            {availableSets.length === 0 && (
                                 <div>
-                                    No sets of my own, please add{' '}
+                                    No sets of my own. Add one{' '}
                                     <Link
                                         href="/my_sets"
                                         className="text-blue-600 hover:underline hover:text-blue-800 transition-colors"

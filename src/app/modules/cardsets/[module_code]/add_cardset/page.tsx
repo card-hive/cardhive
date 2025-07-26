@@ -63,8 +63,8 @@ export default function CreateCardSetPage({
                 <p className="text-xl">{card.back}</p>
             </div>
         ),
-        front: card.front as unknown as Text,
-        back: card.back as unknown as Text,
+        front: card.front as unknown as string,
+        back: card.back as unknown as string,
     }));
 
     const handleDelete = (index: number) => {
@@ -121,7 +121,11 @@ export default function CreateCardSetPage({
                     Flashcard Preview
                 </h2>
                 {flashcards.length > 0 ? (
-                    <FlashcardRenderer cards={rendererCards} />
+                    <FlashcardRenderer
+                        cards={rendererCards}
+                        ownerId={''}
+                        cardsetId={''}
+                    />
                 ) : (
                     <p className="text-gray-500">No flashcards yet.</p>
                 )}
