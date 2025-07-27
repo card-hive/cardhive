@@ -153,14 +153,16 @@ export default function FlashcardRenderer({
             )}
 
             <button
-                className={`mt-4 px-6 py-2 rounded text-white transition ${
+                className={`mt-4 px-6 py-2 rounded text-white cursor-pointer transition ${
                     isSaved
                         ? 'bg-red-600 hover:bg-red-700'
                         : 'bg-blue-600 hover:bg-blue-700'
                 }`}
                 onClick={handleToggleSave}
             >
-                {isSaved ? 'Unsave Card Set' : 'Save Card Set'}
+                {isSaved
+                    ? 'Remove from Saved Card Sets'
+                    : 'Add to Saved Card Sets'}
             </button>
 
             {currentUser === ownerId && (

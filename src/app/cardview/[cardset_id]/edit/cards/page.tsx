@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import FlashcardRenderer from '@/components/FlashcardRenderer';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
 type DBCard = {
     card_id: string;
@@ -298,7 +299,7 @@ export default function AddCardsPage({
                 />
                 <button
                     type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700"
                 >
                     Add Card
                 </button>
@@ -374,10 +375,18 @@ export default function AddCardsPage({
             <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-green-600 text-white px-6 py-3 rounded disabled:bg-green-300"
+                className="bg-green-600 text-white px-6 py-3 rounded disabled:bg-green-300 cursor-pointer hover:bg-green-700 transition-colors"
             >
-                {saving ? 'Saving...' : 'Save All'}
+                {saving ? 'Saving...' : 'Save Changes'}
             </button>
+
+            {/* Back Button */}
+            <Link
+                href={`/cardview/${cardset_id}`}
+                className="ml-4 inline-block px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+                Back to Card View
+            </Link>
 
             {error && <p className="mt-4 text-red-600">{error}</p>}
         </div>
