@@ -5,12 +5,20 @@ import { createClient } from '@/utils/supabase/client';
 import FlashcardRenderer from '@/components/FlashcardRenderer';
 import { v4 as uuidv4 } from 'uuid';
 
-type DBCard = { card_id: string; front: string; back: string };
+type DBCard = {
+    card_id: string;
+    front: string;
+    back: string;
+    options?: string[];
+    correct_answer?: string;
+};
 
 type Flashcard = {
     id: string; // UUID: real for existing, temp for new
     front: string;
     back: string;
+    options?: string[]; // optional for future use
+    correct_answer?: string; // optional for future use
     isNew?: boolean; // true if it's not in DB yet
 };
 
@@ -25,6 +33,8 @@ export default function AddCardsPage({
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
+    const [options, setOptions] = useState<string[]>([]);
+    const [correctAnswer, setCorrectAnswer] = useState('');
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +59,7 @@ export default function AddCardsPage({
 
             const { data: existingCards, error: cardsError } = await supabase
                 .from('cards')
-                .select('card_id, front, back')
+                .select('card_id, front, back, options, correct_answer')
                 .in('card_id', cardset.cards);
 
             if (cardsError) {
@@ -69,6 +79,8 @@ export default function AddCardsPage({
                     id: c.card_id,
                     front: c.front,
                     back: c.back,
+                    options: c.options,
+                    correct_answer: c.correct_answer,
                     isNew: false,
                 })),
             );
@@ -87,12 +99,16 @@ export default function AddCardsPage({
                 id: uuidv4(),
                 front,
                 back,
+                options: options.length > 0 ? options : undefined,
+                correct_answer: correctAnswer || undefined,
                 isNew: true,
             },
         ]);
 
         setFront('');
         setBack('');
+        setOptions([]);
+        setCorrectAnswer('');
     };
 
     // ✅ Reorder locally
@@ -131,7 +147,14 @@ export default function AddCardsPage({
         if (newCards.length > 0) {
             const { data: inserted, error } = await supabase
                 .from('cards')
-                .insert(newCards.map((c) => ({ front: c.front, back: c.back })))
+                .insert(
+                    newCards.map((c) => ({
+                        front: c.front,
+                        back: c.back,
+                        options: c.options,
+                        correct_answer: c.correct_answer,
+                    })),
+                )
                 .select('card_id');
 
             if (error) {
@@ -213,6 +236,24 @@ export default function AddCardsPage({
                     className="border rounded px-4 py-2 mr-2"
                     value={back}
                     onChange={(e) => setBack(e.target.value)}
+                />
+                <input
+                    type="text"
+                    placeholder="Options (comma-separated)"
+                    className="border rounded px-4 py-2 mr-2 mt-2"
+                    value={options.join(',')}
+                    onChange={(e) =>
+                        setOptions(
+                            e.target.value.split(',').map((s) => s.trim()),
+                        )
+                    }
+                />
+                <input
+                    type="text"
+                    placeholder="Correct Answer"
+                    className="border rounded px-4 py-2 mr-2 mt-2"
+                    value={correctAnswer}
+                    onChange={(e) => setCorrectAnswer(e.target.value)}
                 />
                 <button
                     type="submit"
