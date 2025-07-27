@@ -33,7 +33,7 @@ export default async function TestView({
 
     const testCards = rawCards.map((card) => ({
         id: card.card_id,
-        question: card.question,
+        question: card.front,
         options: card.options || [], // assume options is an array column
         correctAnswer: card.correct_answer,
     }));

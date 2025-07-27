@@ -5,12 +5,20 @@ import { createClient } from '@/utils/supabase/client';
 import FlashcardRenderer from '@/components/FlashcardRenderer';
 import { v4 as uuidv4 } from 'uuid';
 
-type DBCard = { card_id: string; front: string; back: string };
+type DBCard = {
+    card_id: string;
+    front: string;
+    back: string;
+    options?: string[];
+    correct_answer?: string;
+};
 
 type Flashcard = {
     id: string; // UUID: real for existing, temp for new
     front: string;
     back: string;
+    options?: string[]; // optional for future use
+    correct_answer?: string; // optional for future use
     isNew?: boolean; // true if it's not in DB yet
 };
 
@@ -23,8 +31,15 @@ export default function AddCardsPage({
     const supabase = createClient();
 
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
+
+    const [options, setOptions] = useState<string[]>([]);
+    const [newOption, setNewOption] = useState('');
+
+    const [correctAnswer, setCorrectAnswer] = useState('');
+
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -49,7 +64,7 @@ export default function AddCardsPage({
 
             const { data: existingCards, error: cardsError } = await supabase
                 .from('cards')
-                .select('card_id, front, back')
+                .select('card_id, front, back, options, correct_answer')
                 .in('card_id', cardset.cards);
 
             if (cardsError) {
@@ -69,13 +84,15 @@ export default function AddCardsPage({
                     id: c.card_id,
                     front: c.front,
                     back: c.back,
+                    options: c.options,
+                    correct_answer: c.correct_answer,
                     isNew: false,
                 })),
             );
         }
 
         loadExistingCards();
-    }, [cardset_id]);
+    }, [cardset_id, supabase]);
 
     // ✅ Add a new card (only locally)
     const handleAddFlashcard = () => {
@@ -87,12 +104,16 @@ export default function AddCardsPage({
                 id: uuidv4(),
                 front,
                 back,
+                options: options.length > 0 ? options : undefined,
+                correct_answer: correctAnswer || undefined,
                 isNew: true,
             },
         ]);
 
         setFront('');
         setBack('');
+        setOptions([]);
+        setCorrectAnswer('');
     };
 
     // ✅ Reorder locally
@@ -131,7 +152,14 @@ export default function AddCardsPage({
         if (newCards.length > 0) {
             const { data: inserted, error } = await supabase
                 .from('cards')
-                .insert(newCards.map((c) => ({ front: c.front, back: c.back })))
+                .insert(
+                    newCards.map((c) => ({
+                        front: c.front,
+                        back: c.back,
+                        options: c.options,
+                        correct_answer: c.correct_answer,
+                    })),
+                )
                 .select('card_id');
 
             if (error) {
@@ -213,6 +241,60 @@ export default function AddCardsPage({
                     className="border rounded px-4 py-2 mr-2"
                     value={back}
                     onChange={(e) => setBack(e.target.value)}
+                />
+                <div className="mb-4">
+                    <label className="block font-semibold mb-1">Options</label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                        {options.map((opt, idx) => (
+                            <span
+                                key={idx}
+                                className="bg-gray-200 px-3 py-1 rounded-full flex items-center"
+                            >
+                                {opt}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setOptions(
+                                            options.filter((_, i) => i !== idx),
+                                        );
+                                    }}
+                                    className="ml-2 text-red-500 hover:text-red-700 font-bold"
+                                >
+                                    ×
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <input
+                        type="text"
+                        className="border rounded px-3 py-2 w-full"
+                        placeholder="Type option and press Enter"
+                        value={newOption}
+                        onChange={(e) => setNewOption(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && newOption.trim() !== '') {
+                                e.preventDefault();
+                                if (!options.includes(newOption.trim())) {
+                                    setOptions([...options, newOption.trim()]);
+                                    setNewOption('');
+                                }
+                            }
+                        }}
+                    />
+                    {options.includes(newOption.trim()) &&
+                        newOption.trim() !== '' && (
+                            <p className="text-sm text-red-500 mt-1">
+                                This option already exists.
+                            </p>
+                        )}
+                </div>
+
+                <input
+                    type="text"
+                    placeholder="Correct Answer"
+                    className="border rounded px-4 py-2 mr-2 mt-2"
+                    value={correctAnswer}
+                    onChange={(e) => setCorrectAnswer(e.target.value)}
                 />
                 <button
                     type="submit"
