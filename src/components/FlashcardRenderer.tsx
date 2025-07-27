@@ -36,9 +36,10 @@ export default function FlashcardRenderer({
     const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
     const [selectedSetIds, setSelectedSetIds] = useState<string[]>([]);
     const [currentUser, setCurrentUser] = useState<string | null>(null);
+    const [isSaved, setIsSaved] = useState<boolean>(false);
 
     useEffect(() => {
-        async function fetchSets() {
+        async function fetchData() {
             const {
                 data: { user },
                 error: userError,
@@ -47,14 +48,27 @@ export default function FlashcardRenderer({
             if (userError || !user) redirect('/login');
             setCurrentUser(user.id);
 
-            const { data, error } = await supabase
+            // Get available sets owned by the user
+            const { data: ownedSets } = await supabase
                 .from('flashcard_sets')
                 .select('cardset_id, title')
                 .eq('owner', user.id);
-            if (!error) setAvailableSets(data || []);
+
+            setAvailableSets(ownedSets || []);
+
+            // ✅ Check if this set is already saved by the user
+            const { data: account } = await supabase
+                .from('accounts')
+                .select('saved_sets')
+                .eq('account_id', user.id)
+                .single();
+
+            if (account?.saved_sets?.includes(cardsetId)) {
+                setIsSaved(true);
+            }
         }
-        fetchSets();
-    }, []);
+        fetchData();
+    }, [cardsetId]);
 
     const toggleCard = (id: number) => {
         setSelectedCardIds((prev) =>
@@ -86,11 +100,50 @@ export default function FlashcardRenderer({
         setSelectedSetIds([]);
     };
 
+    const handleToggleSave = async () => {
+        if (!currentUser) return;
+
+        const { data: account, error: fetchError } = await supabase
+            .from('accounts')
+            .select('saved_sets')
+            .eq('account_id', currentUser)
+            .single();
+
+        if (fetchError || !account) {
+            console.error('Error fetching account', fetchError);
+            return;
+        }
+
+        const savedSets = account.saved_sets || [];
+
+        let updatedSets;
+        if (isSaved) {
+            // Remove from saved
+            updatedSets = savedSets.filter((id: string) => id !== cardsetId);
+        } else {
+            // Add to saved
+            updatedSets = [...savedSets, cardsetId];
+        }
+
+        const { error: updateError } = await supabase
+            .from('accounts')
+            .update({ saved_sets: updatedSets })
+            .eq('account_id', currentUser);
+
+        if (updateError) {
+            console.error('Error updating saved sets', updateError);
+            return;
+        }
+
+        setIsSaved(!isSaved);
+    };
+
     return (
         <div className="flex flex-col items-center justify-start space-y-6">
             <FlashcardArray cards={cards} />
 
-            {ownerId != '' && (
+            {/* Add Cards Button (only if owner) */}
+            {ownerId !== '' && (
                 <button
                     className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
                     onClick={() => setShowMenu(true)}
@@ -98,6 +151,17 @@ export default function FlashcardRenderer({
                     Add Cards to Sets
                 </button>
             )}
+
+            <button
+                className={`mt-4 px-6 py-2 rounded text-white transition ${
+                    isSaved
+                        ? 'bg-red-600 hover:bg-red-700'
+                        : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+                onClick={handleToggleSave}
+            >
+                {isSaved ? 'Unsave Card Set' : 'Save Card Set'}
+            </button>
 
             {currentUser === ownerId && (
                 <Link

@@ -78,6 +78,12 @@ export default async function AccountPage() {
                     >
                         My Sets
                     </a>
+                    <a
+                        href="/saved_sets"
+                        className="px-4 py-2 rounded hover:bg-gray-200 transition"
+                    >
+                        Saved Sets
+                    </a>
                 </div>
             </div>
         </div>

@@ -291,7 +291,7 @@ export default function AddCardsPage({
             {/* Save Button */}
             <button
                 onClick={handleSave}
-                disabled={saving || flashcards.length === 0}
+                disabled={saving}
                 className="bg-green-600 text-white px-6 py-3 rounded disabled:bg-green-300"
             >
                 {saving ? 'Saving...' : 'Save All'}
