@@ -97,5 +97,5 @@ export async function submitCardSet(
     }
 
     // 4. Redirect to the new cardset page
-    redirect(`/modules/cardsets/${moduleCode}/${newSet.cardset_id}`);
+    redirect(`/modules/${moduleCode}/${newSet.cardset_id}`);
 }

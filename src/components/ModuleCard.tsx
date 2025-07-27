@@ -9,7 +9,7 @@ interface ModuleCardProps {
 export default function ModuleCard({ code, image }: ModuleCardProps) {
     return (
         <Link
-            href={`/modules/cardsets/${code}`}
+            href={`/modules/${code}`}
             className="bg-white rounded-2xl shadow-md overflow-hidden w-full flex flex-col items-center"
         >
             <div className="relative w-full h-32">
