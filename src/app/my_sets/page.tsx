@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import FlashcardBundle from '@/components/FlashcardBundle'; // adjust path as needed
+import FlashcardBundle from '@/components/FlashcardBundle';
 import Link from 'next/link';
 
 export default async function MyCardSetsPage() {
@@ -15,7 +15,7 @@ export default async function MyCardSetsPage() {
 
     const { data: sets, error: setsError } = await supabase
         .from('flashcard_sets')
-        .select('cardset_id, title, image')
+        .select('cardset_id, title, description, image, verified')
         .eq('owner', user.id)
         .order('date_created', { ascending: false });
 
@@ -26,6 +26,30 @@ export default async function MyCardSetsPage() {
                 <p className="text-red-600">Failed to load sets.</p>
             </div>
         );
+    }
+
+    const verifierIds = sets.flatMap((s) => s.verified || []);
+    let verifiersById: Record<string, { name: string; account_type: string }> =
+        {};
+
+    if (verifierIds.length > 0) {
+        const { data: verifierData } = await supabase
+            .from('accounts')
+            .select('account_id, name, account_type')
+            .in('account_id', verifierIds);
+
+        if (verifierData) {
+            verifiersById = verifierData.reduce(
+                (acc, v) => {
+                    acc[v.account_id] = {
+                        name: v.name,
+                        account_type: v.account_type,
+                    };
+                    return acc;
+                },
+                {} as Record<string, { name: string; account_type: string }>,
+            );
+        }
     }
 
     return (
@@ -44,14 +68,23 @@ export default async function MyCardSetsPage() {
                 <p className="text-gray-500">You don’t have any sets yet.</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {sets.map((set) => (
-                        <FlashcardBundle
-                            key={set.cardset_id}
-                            cardset_id={set.cardset_id}
-                            title={set.title}
-                            image={set.image}
-                        />
-                    ))}
+                    {sets.map((set) => {
+                        const resolvedVerifiers =
+                            set.verified
+                                ?.map((id: string) => verifiersById[id])
+                                .filter(Boolean) || [];
+
+                        return (
+                            <FlashcardBundle
+                                key={set.cardset_id}
+                                cardset_id={set.cardset_id}
+                                title={set.title}
+                                description={set.description || ''}
+                                image={set.image}
+                                verifiers={resolvedVerifiers}
+                            />
+                        );
+                    })}
                 </div>
             )}
         </div>

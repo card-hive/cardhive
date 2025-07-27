@@ -28,7 +28,7 @@ export default async function CardsetsPage({
 
     const { data: cardsets, error: cardsetsError } = await supabase
         .from('flashcard_sets')
-        .select('*')
+        .select('cardset_id, title, description, image, verified')
         .overlaps('modules', [module.module_id]);
 
     if (cardsetsError) {
@@ -37,11 +37,49 @@ export default async function CardsetsPage({
     }
 
     const filteredSets = searchQuery
-        ? cardsets?.filter((set) =>
-              set.title?.toLowerCase().includes(searchQuery),
+        ? cardsets?.filter(
+              (set) =>
+                  set.title?.toLowerCase().includes(searchQuery) ||
+                  set.description?.toLowerCase().includes(searchQuery),
           )
         : cardsets;
 
+    const enrichedSets = await Promise.all(
+        (filteredSets || []).map(async (set) => {
+            let verifiers: {
+                name: string;
+                account_type: 'Student' | 'TA' | 'Professor';
+            }[] = [];
+
+            if (Array.isArray(set.verified) && set.verified.length > 0) {
+                const { data: verifierData, error: verifierError } =
+                    await supabase
+                        .from('accounts')
+                        .select('name, account_type, account_id')
+                        .in('account_id', set.verified);
+
+                if (!verifierError && verifierData) {
+                    verifiers = verifierData.map((v) => ({
+                        name: v.name || 'Unnamed User',
+                        account_type:
+                            v.account_type === 'Professor'
+                                ? 'Professor'
+                                : v.account_type === 'TA'
+                                  ? 'TA'
+                                  : 'Student',
+                    }));
+                }
+            }
+
+            return {
+                id: set.cardset_id,
+                title: set.title,
+                description: set.description || '',
+                image: set.image,
+                verifiers,
+            };
+        }),
+    );
     return (
         <main className="min-h-screen bg-white flex flex-col items-center">
             <div className="w-full max-w-4xl p-6">
@@ -63,7 +101,6 @@ export default async function CardsetsPage({
                     </button>
                 </form>
 
-                {/* ➕ Add Card Set */}
                 <div className="flex justify-end mb-6">
                     <a
                         href={`/modules/cardsets/${moduleCode}/add_cardset`}
@@ -73,8 +110,8 @@ export default async function CardsetsPage({
                     </a>
                 </div>
 
-                {filteredSets && filteredSets.length > 0 ? (
-                    <CardSetGrid cardsets={filteredSets} />
+                {enrichedSets && enrichedSets.length > 0 ? (
+                    <CardSetGrid cardsets={enrichedSets} />
                 ) : (
                     <p className="text-gray-500">No cardsets found.</p>
                 )}
