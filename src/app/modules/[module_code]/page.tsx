@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import CardSetGrid from '@/components/CardSetGrid';
 import { supabase } from '@/lib/supabaseClient';
+import Link from 'next/link';
 
 type Params = { module_code: string };
 type SearchParams = { q?: string };
@@ -108,6 +109,12 @@ export default async function CardsetsPage({
                     >
                         + Add Card Set
                     </a>
+                    <Link
+                        href={`/new/${moduleCode}`}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                        + New Set
+                    </Link>
                 </div>
 
                 {enrichedSets && enrichedSets.length > 0 ? (

@@ -57,7 +57,7 @@ export default async function MyCardSetsPage() {
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-3xl font-bold">My Card Sets</h1>
                 <Link
-                    href="/my_sets/new"
+                    href="/new"
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
                     + New Set

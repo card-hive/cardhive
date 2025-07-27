@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
-export default function NewCardSetPage() {
+type Params = { module_code: string };
+
+export default function NewCardSetPage({ params }: { params: Params }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isPublic, setIsPublic] = useState(false);
@@ -47,22 +49,74 @@ export default function NewCardSetPage() {
 
             imageUrl = urlData?.publicUrl || null;
         }
+        const { module_code: moduleCode } = await params;
+        // Look up the module UUID based on moduleCode
+        const { data: moduleData, error: moduleFetchError } = await supabase
+            .from('modules')
+            .select('module_id')
+            .eq('code', moduleCode)
+            .single();
 
-        const { error: insertError } = await supabase
+        if (moduleFetchError || !moduleData) {
+            alert('Invalid module code');
+            console.error('Module fetch error:', moduleFetchError);
+            setSubmitting(false);
+            return;
+        }
+
+        // Step 1: Insert flashcard set and get its ID
+        const { data: insertCardsetData, error: insertError } = await supabase
             .from('flashcard_sets')
             .insert({
                 title: title,
                 description: description,
                 public: isPublic,
-                // modules: modules.split(',').map((m) => m.trim()),
-                image: imageUrl ? imageUrl : undefined,
+                modules: [moduleData.module_id], // Associate with the module
+                image: imageUrl ?? undefined,
                 owner: user.id,
-            });
+            })
+            .select('cardset_id') // 👈 tells Supabase to return the `id` of the inserted row
+            .single(); // 👈 since you're only inserting one row
 
         if (insertError) {
             alert('Failed to create set');
+            console.error('Insert error:', insertError);
         } else {
+            const newCardSetId = insertCardsetData.cardset_id;
             router.push('/my_sets');
+            // Step 2: Get the current module's cardsets array
+            const { data: currentModule, error: fetchModuleError } =
+                await supabase
+                    .from('modules')
+                    .select('cardsets')
+                    .eq('module_id', moduleData.module_id)
+                    .single();
+
+            if (fetchModuleError || !currentModule) {
+                alert('Failed to fetch module cardsets');
+                console.error('Fetch error:', fetchModuleError);
+                setSubmitting(false);
+                return;
+            }
+
+            // Step 3: Append new set ID to module.cardsets
+            const updatedCardsets = [
+                ...(currentModule.cardsets || []),
+                newCardSetId,
+            ];
+
+            // Step 4: Update module with new cardsets array
+            const { error: moduleInsertError } = await supabase
+                .from('modules')
+                .update({ cardsets: updatedCardsets })
+                .eq('module_id', moduleData.module_id);
+
+            if (moduleInsertError) {
+                alert('Failed to update module');
+                console.error('Module update error:', moduleInsertError);
+                setSubmitting(false);
+                return;
+            }
         }
 
         setSubmitting(false);
