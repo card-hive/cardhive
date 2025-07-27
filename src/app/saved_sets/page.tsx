@@ -1,7 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import FlashcardBundle from '@/components/FlashcardBundle';
-import Link from 'next/link';
 import { UUID } from 'crypto';
 
 export default async function MyCardSetsPage() {
@@ -89,13 +88,13 @@ export default async function MyCardSetsPage() {
     return (
         <div className="p-6 max-w-5xl mx-auto">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-3xl font-bold">My Card Sets</h1>
-                <Link
-                    href="/my_sets/new"
+                <h1 className="text-3xl font-bold">Saved Card Sets</h1>
+                {/* <Link
+                    href="/new"
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
                     + New Set
-                </Link>
+                </Link> */}
             </div>
 
             {formattedSets.length === 0 ? (

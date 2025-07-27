@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import FlashcardRenderer from '@/components/FlashcardRenderer';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
 type DBCard = {
     card_id: string;
@@ -96,7 +97,25 @@ export default function AddCardsPage({
 
     // ✅ Add a new card (only locally)
     const handleAddFlashcard = () => {
-        if (front.trim() === '' || back.trim() === '') return;
+        const errors = [];
+
+        if (front.trim() === '') {
+            errors.push('Front cannot be empty. ');
+        }
+        if (back.trim() === '') {
+            errors.push('Back cannot be empty. ');
+        }
+        if (options.length === 0) {
+            errors.push('At least one option is required. ');
+        }
+        if (correctAnswer.trim() === '') {
+            errors.push('Correct answer cannot be empty. ');
+        }
+        if (errors.length > 0) {
+            setError(errors.join(' ')); // Or display them in a list
+            return;
+        }
+        setError('');
 
         setFlashcards([
             ...flashcards,
@@ -228,6 +247,7 @@ export default function AddCardsPage({
                 }}
                 className="mb-6"
             >
+                {error && <p className="mt-4 text-red-600">{error}</p>}
                 <input
                     type="text"
                     placeholder="Front"
@@ -288,7 +308,6 @@ export default function AddCardsPage({
                             </p>
                         )}
                 </div>
-
                 <input
                     type="text"
                     placeholder="Correct Answer"
@@ -298,7 +317,7 @@ export default function AddCardsPage({
                 />
                 <button
                     type="submit"
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700"
                 >
                     Add Card
                 </button>
@@ -374,12 +393,18 @@ export default function AddCardsPage({
             <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-green-600 text-white px-6 py-3 rounded disabled:bg-green-300"
+                className="bg-green-600 text-white px-6 py-3 rounded disabled:bg-green-300 cursor-pointer hover:bg-green-700 transition-colors"
             >
-                {saving ? 'Saving...' : 'Save All'}
+                {saving ? 'Saving...' : 'Save Changes'}
             </button>
 
-            {error && <p className="mt-4 text-red-600">{error}</p>}
+            {/* Back Button */}
+            <Link
+                href={`/cardview/${cardset_id}`}
+                className="ml-4 inline-block px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+                Back to Card View
+            </Link>
         </div>
     );
 }

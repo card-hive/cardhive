@@ -142,35 +142,39 @@ export default function FlashcardRenderer({
         <div className="flex flex-col items-center justify-start space-y-6">
             <FlashcardArray cards={cards} />
 
-            {/* Add Cards Button (only if owner) */}
-            {ownerId !== '' && (
+            <div className="flex flex-wrap gap-4 mt-6">
+                {/* Add Cards Button (only if owner) */}
+                {ownerId !== '' && (
+                    <button
+                        className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        onClick={() => setShowMenu(true)}
+                    >
+                        Select Cards to Add to Saved Card Sets
+                    </button>
+                )}
+
                 <button
-                    className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-                    onClick={() => setShowMenu(true)}
+                    className={`px-6 py-2 rounded text-white cursor-pointer transition ${
+                        isSaved
+                            ? 'bg-red-600 hover:bg-red-700'
+                            : 'bg-blue-600 hover:bg-blue-700'
+                    }`}
+                    onClick={handleToggleSave}
                 >
-                    Add Cards to Sets
+                    {isSaved
+                        ? 'Remove from Saved Card Sets'
+                        : 'Add This Card Set to Saved Card Sets'}
                 </button>
-            )}
 
-            <button
-                className={`mt-4 px-6 py-2 rounded text-white transition ${
-                    isSaved
-                        ? 'bg-red-600 hover:bg-red-700'
-                        : 'bg-blue-600 hover:bg-blue-700'
-                }`}
-                onClick={handleToggleSave}
-            >
-                {isSaved ? 'Unsave Card Set' : 'Save Card Set'}
-            </button>
-
-            {currentUser === ownerId && (
-                <Link
-                    href={`/cardview/${cardsetId}/edit`}
-                    className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
-                >
-                    Edit Cardset
-                </Link>
-            )}
+                {currentUser === ownerId && (
+                    <Link
+                        href={`/cardview/${cardsetId}/edit`}
+                        className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                    >
+                        Edit Cardset
+                    </Link>
+                )}
+            </div>
 
             {showMenu && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
@@ -234,7 +238,7 @@ export default function FlashcardRenderer({
                                 Cancel
                             </button>
                             <button
-                                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                                className="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                                 onClick={handleAdd}
                                 disabled={
                                     selectedCardIds.length === 0 ||

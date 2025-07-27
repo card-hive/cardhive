@@ -4,12 +4,17 @@ import Link from 'next/link';
 interface ModuleCardProps {
     code: string;
     image: string;
+    add_cardset?: boolean;
 }
 
-export default function ModuleCard({ code, image }: ModuleCardProps) {
+export default function ModuleCard({
+    code,
+    image,
+    add_cardset,
+}: ModuleCardProps) {
     return (
         <Link
-            href={`/modules/cardsets/${code}`}
+            href={add_cardset ? `/new/${code}` : `/modules/${code}`}
             className="bg-white rounded-2xl shadow-md overflow-hidden w-full flex flex-col items-center"
         >
             <div className="relative w-full h-32">
