@@ -59,7 +59,7 @@ export default async function AccountPage() {
                     Edit Profile
                 </a>
             </div>
-            <form method="post" action="/auth/signout" className="mt-8">
+            <form method="post" action="/auth/signout" className="mt-6">
                 <button
                     type="submit"
                     className="w-full bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
@@ -67,6 +67,25 @@ export default async function AccountPage() {
                     Sign Out
                 </button>
             </form>
+
+            {/* Menu section */}
+            <div className="mt-10 bg-gray-100 rounded-lg shadow-inner p-4">
+                <h2 className="text-lg font-semibold mb-3">Menu</h2>
+                <div className="flex flex-col space-y-2">
+                    <a
+                        href="/my_sets"
+                        className="px-4 py-2 rounded hover:bg-gray-200 transition"
+                    >
+                        My Sets
+                    </a>
+                    <a
+                        href="/saved_sets"
+                        className="px-4 py-2 rounded hover:bg-gray-200 transition"
+                    >
+                        Saved Sets
+                    </a>
+                </div>
+            </div>
         </div>
     );
 }
