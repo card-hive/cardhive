@@ -68,7 +68,7 @@ export default function FlashcardRenderer({
             }
         }
         fetchData();
-    }, [cardsetId]);
+    }, [cardsetId, supabase]);
 
     const toggleCard = (id: number) => {
         setSelectedCardIds((prev) =>
