@@ -97,7 +97,25 @@ export default function AddCardsPage({
 
     // ✅ Add a new card (only locally)
     const handleAddFlashcard = () => {
-        if (front.trim() === '' || back.trim() === '') return;
+        const errors = [];
+
+        if (front.trim() === '') {
+            errors.push('Front cannot be empty. ');
+        }
+        if (back.trim() === '') {
+            errors.push('Back cannot be empty. ');
+        }
+        if (options.length === 0) {
+            errors.push('At least one option is required. ');
+        }
+        if (correctAnswer.trim() === '') {
+            errors.push('Correct answer cannot be empty. ');
+        }
+        if (errors.length > 0) {
+            setError(errors.join(' ')); // Or display them in a list
+            return;
+        }
+        setError('');
 
         setFlashcards([
             ...flashcards,
@@ -229,6 +247,7 @@ export default function AddCardsPage({
                 }}
                 className="mb-6"
             >
+                {error && <p className="mt-4 text-red-600">{error}</p>}
                 <input
                     type="text"
                     placeholder="Front"
@@ -289,7 +308,6 @@ export default function AddCardsPage({
                             </p>
                         )}
                 </div>
-
                 <input
                     type="text"
                     placeholder="Correct Answer"
@@ -387,8 +405,6 @@ export default function AddCardsPage({
             >
                 Back to Card View
             </Link>
-
-            {error && <p className="mt-4 text-red-600">{error}</p>}
         </div>
     );
 }
