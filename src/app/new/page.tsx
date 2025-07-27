@@ -38,8 +38,7 @@ export default function NewCardSetModulePage() {
             <div className="w-full max-w-4xl p-6">
                 <div className="bg-blue-100 border border-blue-300  px-6 py-4 rounded-xl mb-6 shadow-sm">
                     <h1 className="text-2xl font-semibold">
-                        Select at least one module that the new cardset belongs
-                        to.
+                        Assign this card set to at least one module.
                     </h1>
                 </div>
                 <input

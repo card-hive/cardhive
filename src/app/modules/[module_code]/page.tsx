@@ -103,17 +103,11 @@ export default async function CardsetsPage({
                 </form>
 
                 <div className="flex justify-end mb-6">
-                    <a
-                        href={`/modules/${moduleCode}/add_cardset`}
-                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
-                    >
-                        + Add Card Set
-                    </a>
                     <Link
                         href={`/new/${moduleCode}`}
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                     >
-                        + New Set
+                        + New Set with {moduleCode} Content
                     </Link>
                 </div>
 
