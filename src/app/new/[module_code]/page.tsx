@@ -6,7 +6,11 @@ import { createClient } from '@/utils/supabase/client';
 
 type Params = { module_code: string };
 
-export default function NewCardSetPage({ params }: { params: Params }) {
+export default function NewCardSetPage({
+    params,
+}: {
+    params: Promise<Params>;
+}) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [isPublic, setIsPublic] = useState(false);
