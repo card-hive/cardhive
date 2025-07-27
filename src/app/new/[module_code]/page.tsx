@@ -87,7 +87,7 @@ export default function NewCardSetPage({
             console.error('Insert error:', insertError);
         } else {
             const newCardSetId = insertCardsetData.cardset_id;
-            router.push('/my_sets');
+            router.push('/cardview/' + newCardSetId);
             // Step 2: Get the current module's cardsets array
             const { data: currentModule, error: fetchModuleError } =
                 await supabase
