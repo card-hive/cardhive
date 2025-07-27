@@ -31,10 +31,15 @@ export default function AddCardsPage({
     const supabase = createClient();
 
     const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
+
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
+
     const [options, setOptions] = useState<string[]>([]);
+    const [newOption, setNewOption] = useState('');
+
     const [correctAnswer, setCorrectAnswer] = useState('');
+
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -237,17 +242,53 @@ export default function AddCardsPage({
                     value={back}
                     onChange={(e) => setBack(e.target.value)}
                 />
-                <input
-                    type="text"
-                    placeholder="Options (comma-separated)"
-                    className="border rounded px-4 py-2 mr-2 mt-2"
-                    value={options.join(',')}
-                    onChange={(e) =>
-                        setOptions(
-                            e.target.value.split(',').map((s) => s.trim()),
-                        )
-                    }
-                />
+                <div className="mb-4">
+                    <label className="block font-semibold mb-1">Options</label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                        {options.map((opt, idx) => (
+                            <span
+                                key={idx}
+                                className="bg-gray-200 px-3 py-1 rounded-full flex items-center"
+                            >
+                                {opt}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setOptions(
+                                            options.filter((_, i) => i !== idx),
+                                        );
+                                    }}
+                                    className="ml-2 text-red-500 hover:text-red-700 font-bold"
+                                >
+                                    ×
+                                </button>
+                            </span>
+                        ))}
+                    </div>
+                    <input
+                        type="text"
+                        className="border rounded px-3 py-2 w-full"
+                        placeholder="Type option and press Enter"
+                        value={newOption}
+                        onChange={(e) => setNewOption(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && newOption.trim() !== '') {
+                                e.preventDefault();
+                                if (!options.includes(newOption.trim())) {
+                                    setOptions([...options, newOption.trim()]);
+                                    setNewOption('');
+                                }
+                            }
+                        }}
+                    />
+                    {options.includes(newOption.trim()) &&
+                        newOption.trim() !== '' && (
+                            <p className="text-sm text-red-500 mt-1">
+                                This option already exists.
+                            </p>
+                        )}
+                </div>
+
                 <input
                     type="text"
                     placeholder="Correct Answer"
