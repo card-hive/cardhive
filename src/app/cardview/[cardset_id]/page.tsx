@@ -13,10 +13,16 @@ export default async function CardView({
     const { cardset_id: cardsetId } = await params;
     const supabase = await createClient();
 
-    // 1. Fetch card ids from the cardset
+    const {
+        data: { user },
+        error: userError,
+    } = await supabase.auth.getUser();
+    if (userError) redirect('/login');
+    if (user == null) redirect('/login');
+
     const { data: cardset, error: setError } = await supabase
         .from('flashcard_sets')
-        .select('cards, owner')
+        .select('cards, owner, verified')
         .eq('cardset_id', cardsetId)
         .single();
 
@@ -25,12 +31,7 @@ export default async function CardView({
         return notFound();
     }
 
-    if (cardset.cards.length == 0) {
-        const {
-            data: { user },
-            error: userError,
-        } = await supabase.auth.getUser();
-        if (userError || !user) redirect('/login');
+    if (cardset.cards.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center mt-12">
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-md max-w-md text-center">
@@ -51,7 +52,6 @@ export default async function CardView({
         );
     }
 
-    // 2. Fetch the actual cards
     const { data: rawCards, error: cardsError } = await supabase
         .from('cards')
         .select('*')
@@ -77,6 +77,18 @@ export default async function CardView({
         back: card.back,
     }));
 
+    const hasVerified = cardset.verified?.includes(user.id);
+
+    async function handleVerify() {
+        'use server';
+        const supabaseServer = await createClient();
+
+        await supabaseServer.rpc('append_verifier_to_set', {
+            set_id_input: cardsetId,
+            verifier_id_input: user ? user.id : '',
+        });
+    }
+
     return (
         <main className="max-w-4xl mx-auto p-6">
             <FlashcardRenderer
@@ -84,6 +96,23 @@ export default async function CardView({
                 cardsetId={cardsetId}
                 ownerId={cardset.owner}
             />
+
+            {user.id !== cardset.owner && (
+                <form action={handleVerify}>
+                    <button
+                        type="submit"
+                        disabled={hasVerified}
+                        className={`mt-4 px-6 py-2 rounded-md transition ${
+                            hasVerified
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-green-600 hover:bg-green-700 text-white'
+                        }`}
+                    >
+                        {hasVerified ? 'Already Verified' : 'Verify This Set'}
+                    </button>
+                </form>
+            )}
+
             <Link
                 className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                 href={`/cardview/${cardsetId}/testview`}
