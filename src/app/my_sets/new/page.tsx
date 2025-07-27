@@ -55,7 +55,7 @@ export default function NewCardSetPage() {
                 description: description,
                 public: isPublic,
                 // modules: modules.split(',').map((m) => m.trim()),
-                image: imageUrl,
+                image: imageUrl ? imageUrl : undefined,
                 owner: user.id,
             });
 
