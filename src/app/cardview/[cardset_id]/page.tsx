@@ -12,11 +12,25 @@ export default async function CardView({
 }) {
     const { cardset_id: cardsetId } = await params;
     const supabase = await createClient();
+    let myAccountType = 'none';
 
     const {
         data: { user },
         error: userError,
     } = await supabase.auth.getUser();
+    if (user) {
+        const { data, error } = await supabase
+            .from('accounts')
+            .select('account_type')
+            .eq('account_id', user.id)
+            .single();
+
+        if (error) {
+            console.error('Failed to fetch account type:', error);
+        } else {
+            myAccountType = data.account_type;
+        }
+    }
     if (userError) redirect('/login');
     if (user == null) redirect('/login');
 
@@ -87,6 +101,7 @@ export default async function CardView({
             set_id_input: cardsetId,
             verifier_id_input: user ? user.id : '',
         });
+        redirect(`/cardview/${cardsetId}`);
     }
 
     return (
@@ -102,13 +117,15 @@ export default async function CardView({
                     <button
                         type="submit"
                         disabled={hasVerified}
-                        className={`mt-4 px-6 py-2 rounded-md transition ${
+                        className={`mt-4 px-6 py-2 rounded-md transition cursor-pointer ${
                             hasVerified
                                 ? 'bg-gray-400 cursor-not-allowed'
                                 : 'bg-green-600 hover:bg-green-700 text-white'
                         }`}
                     >
-                        {hasVerified ? 'Already Verified' : 'Verify This Set'}
+                        {hasVerified
+                            ? 'Already Verified'
+                            : `Verify This Card Set as ${myAccountType}`}
                     </button>
                 </form>
             )}
