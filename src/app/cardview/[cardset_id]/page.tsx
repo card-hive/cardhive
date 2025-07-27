@@ -117,24 +117,24 @@ export default async function CardView({
                     <button
                         type="submit"
                         disabled={hasVerified}
-                        className={`mt-4 px-6 py-2 rounded-md transition cursor-pointer ${
+                        className={`mt-4 px-6 py-2 rounded-md transition ${
                             hasVerified
-                                ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-green-600 hover:bg-green-700 text-white'
+                                ? 'bg-green-400 cursor-not-allowed'
+                                : 'bg-green-600 hover:bg-green-700 text-white cursor-pointer'
                         }`}
                     >
                         {hasVerified
-                            ? 'Already Verified'
+                            ? 'Already Verified ✅'
                             : `Verify This Card Set as ${myAccountType}`}
                     </button>
                 </form>
             )}
 
             <Link
-                className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                className="inline-block mt-6 px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition"
                 href={`/cardview/${cardsetId}/testview`}
             >
-                Start Test
+                Test Yourself!
             </Link>
         </main>
     );
