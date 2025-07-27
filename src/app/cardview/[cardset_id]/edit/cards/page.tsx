@@ -92,7 +92,7 @@ export default function AddCardsPage({
         }
 
         loadExistingCards();
-    }, [cardset_id]);
+    }, [cardset_id, supabase]);
 
     // ✅ Add a new card (only locally)
     const handleAddFlashcard = () => {
