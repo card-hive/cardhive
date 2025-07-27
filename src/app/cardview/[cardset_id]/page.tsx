@@ -14,6 +14,16 @@ export default async function CardView({
     const supabase = await createClient();
     let myAccountType = 'none';
 
+    const { data: cardsetNameData, error: nameError } = await supabase
+        .from('flashcard_sets')
+        .select('title')
+        .eq('cardset_id', cardsetId)
+        .single();
+    if (nameError || !cardsetNameData) {
+        console.error('Failed to load cardset name:', nameError);
+        return notFound();
+    }
+
     const {
         data: { user },
         error: userError,
@@ -50,7 +60,7 @@ export default async function CardView({
             <div className="flex flex-col items-center justify-center mt-12">
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-md max-w-md text-center">
                     <p className="text-lg text-gray-700 mb-6">
-                        This set doesn’t have any cards yet.
+                        The cardset {cardsetNameData?.title} is empty.
                     </p>
 
                     {user.id === cardset.owner && (
